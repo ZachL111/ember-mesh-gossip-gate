@@ -1,68 +1,40 @@
 # ember-mesh-gossip-gate
 
-`ember-mesh-gossip-gate` packages a practical distributed systems exercise in SQL. The emphasis is on deterministic behavior, a small public API, and examples that explain the tradeoffs.
+`ember-mesh-gossip-gate` explores distributed systems with a small SQL codebase and local fixtures. The technical goal is to implement an SQL distributed systems project for gossip protocol validation, using framed sample traffic and bounds and ordering tests.
 
-## How I Read Ember Mesh Gossip Gate
+## Project Rationale
 
-The useful thing to inspect here is how the same score rule is represented in code, metadata, and examples. If those three pieces disagree, the audit script should make the drift visible.
+I want this repository to be useful as a quick reading exercise: fixtures first, implementation second, verifier last.
 
-## Internal Model
+## Ember Mesh Gossip Gate Review Notes
 
-The interesting part is the boundary between accepted and reviewed scenarios. Extended examples sit near that boundary so future edits can show whether the model became more permissive or more cautious. The SQL project uses sqlite fixtures, views, and assertions to keep query behavior inspectable.
+Start with `quorum health` and `quorum health`. Those cases create the widest score spread in this repo, so they are the best quick check when the model changes.
 
-## Problem Shape
+## Feature Set
 
-The repository exists to keep a technical idea small enough to reason about. The implementation avoids external dependencies where possible, then uses fixtures to make changes easy to review.
+- `fixtures/domain_review.csv` adds cases for quorum health and lease drift.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/ember-mesh-gossip-walkthrough.md` walks through the case spread.
+- The SQL code includes a review path for `quorum health` and `quorum health`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Main Behaviors
+## Architecture
 
-- Uses fixture data to keep quorum behavior changes visible in code review.
-- Includes extended examples for lease timing, including `surge` and `degraded`.
-- Documents message ordering tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
+The fixture data drives the tests. The code stays thin, while `metadata/domain-review.json` and `config/review-profile.json` explain what each case is meant to protect.
 
-## Scenario Walkthrough
+The SQL checks add a separate view over the domain review fixture.
 
-`recovery` is the first example I would inspect because it lands on the `accept` path with a score of 195. The broader file also keeps `degraded` at 6 and `surge` at 205, which gives the model a useful low-to-high spread.
-
-## Repository Map
-
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-- `schema.sql`: sqlite schema and view definitions
-
-## Run It Locally
-
-Clone the repository, enter the directory, and run the verifier. No database server, cloud account, or token is required.
-
-## How To Run It
+## Usage
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Test Command
 
-## Validation
+That command is also the regression path. It verifies the domain cases and catches mismatches between the CSV, metadata, and code.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+## Next Improvements
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Known Edges
-
-The fixture set is deliberately small. That keeps the review surface clear, but it also means the model should not be treated as a complete domain simulator.
-
-## Follow-Up Work
-
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add one more distributed systems fixture that focuses on a malformed or borderline input.
+No external service is required. A deeper version would add more negative cases and a clearer boundary around invalid input.

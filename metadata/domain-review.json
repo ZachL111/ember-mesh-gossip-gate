@@ -1,0 +1,73 @@
+{
+  "repo": "ember-mesh-gossip-gate",
+  "language": "SQL",
+  "category": "Distributed systems",
+  "goal": "Implement an SQL distributed systems project for gossip protocol validation, using framed sample traffic and bounds and ordering tests.",
+  "review_model": {
+    "terms": [
+      "quorum health",
+      "lease drift",
+      "replica lag",
+      "membership churn"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "quorum health",
+      "signal": 42,
+      "slack": 26,
+      "drag": 21,
+      "confidence": 70,
+      "score": 117,
+      "lane": "watch"
+    },
+    {
+      "name": "stress",
+      "focus": "lease drift",
+      "signal": 53,
+      "slack": 22,
+      "drag": 8,
+      "confidence": 88,
+      "score": 192,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "replica lag",
+      "signal": 67,
+      "slack": 44,
+      "drag": 31,
+      "confidence": 93,
+      "score": 178,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "membership churn",
+      "signal": 87,
+      "slack": 43,
+      "drag": 31,
+      "confidence": 82,
+      "score": 206,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "quorum health",
+      "signal": 82,
+      "slack": 34,
+      "drag": 22,
+      "confidence": 91,
+      "score": 223,
+      "lane": "ship"
+    }
+  ]
+}
