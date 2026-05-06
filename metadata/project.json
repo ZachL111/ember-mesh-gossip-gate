@@ -1,0 +1,32 @@
+{
+  "index": 358,
+  "phase": 2,
+  "batch": 40,
+  "name": "ember-mesh-gossip-gate",
+  "planned_name": "ember-mesh-gossip-gate",
+  "language": "SQL",
+  "category": "Distributed systems",
+  "goal": "Implement an SQL distributed systems project for gossip protocol validation, using framed sample traffic and bounds and ordering tests.",
+  "repository_url": "https://github.com/ZachL111/ember-mesh-gossip-gate",
+  "verification_command": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1",
+  "model": {
+    "inputs": [
+      "demand",
+      "capacity",
+      "latency",
+      "risk",
+      "weight"
+    ],
+    "threshold": 153,
+    "risk_penalty": 4,
+    "latency_penalty": 3,
+    "weight_bonus": 3,
+    "decision_rule": "accept when score is greater than or equal to threshold, otherwise review"
+  },
+  "quality_gates": [
+    "readme constraint scan",
+    "fixture presence check",
+    "metadata JSON parse",
+    "language verifier"
+  ]
+}
